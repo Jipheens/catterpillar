@@ -120,15 +120,37 @@ public class CaterpillarControlSystem
         return Math.Abs(position1[0] - position2[0]) + Math.Abs(position1[1] - position2[1]);
     }
 
-    private void LogCommand(char direction, int steps)
+    private const string logFileName = "command_log.txt";
+
+    // New method to save logs to a file
+    private void SaveLogsToFile()
     {
-        // Log the executed command
-        string command = $"{direction} {steps}";
-        commandLog.Add(command);
-        undoLog.Push(command); // Push onto undo log for potential undoing
-        redoLog.Clear(); // Clear redo log as a new command was executed
+        try
+        {
+            using (StreamWriter writer = new StreamWriter(logFileName))
+            {
+                foreach (string command in commandLog)
+                {
+                    writer.WriteLine(command);
+                }
+            }
+            Console.WriteLine("Command logs saved to file: " + logFileName);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error saving command logs to file: " + ex.Message);
+        }
     }
 
+    // Updated method to log commands
+    private void LogCommand(char direction, int steps)
+    {
+        string command = $"{direction} {steps}";
+        commandLog.Add(command);
+        undoLog.Push(command);
+        redoLog.Clear();
+        SaveLogsToFile(); // Call the new method to save logs to file
+    }
     public void UndoLastCommand()
     {
         // Undo the last command
@@ -202,6 +224,8 @@ public class CaterpillarControlSystem
         // Display caterpillar's position on the planet's grid
         DisplayPlanet(); // Reuse DisplayPlanet to also show caterpillar
     }
+
+
 
     public void Run()
     {
