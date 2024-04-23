@@ -1,27 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 public class CaterpillarControlSystem
 {
-
-
-    static void Main(string[] args)
-    {
-        CaterpillarControlSystem controlSystem = new CaterpillarControlSystem();
-
-        
-        controlSystem.ExecuteCommand('R', 4);
-        controlSystem.ExecuteCommand('U', 4);
-        controlSystem.ExecuteCommand('L', 3);
-        controlSystem.ExecuteCommand('D', 1);
-        controlSystem.ExecuteCommand('R', 4);
-        controlSystem.ExecuteCommand('D', 1);
-        controlSystem.ExecuteCommand('L', 5);
-        controlSystem.ExecuteCommand('R', 2);
-
-        controlSystem.DisplayPlanet();
-        controlSystem.DisplayCaterpillar();
-    }
     private char[,] planetGrid;
     private List<string> commandLog;
     private Stack<string> undoLog;
@@ -32,9 +14,6 @@ public class CaterpillarControlSystem
     private const int gridWidth = 30;
     private const int gridHeight = 30;
     private const char emptySquare = '.';
-    private const char spice = '$';
-    private const char booster = 'B';
-    private const char obstacle = '#';
     private const char head = 'H';
     private const char tail = 'T';
 
@@ -53,7 +32,7 @@ public class CaterpillarControlSystem
 
     private void InitializePlanet()
     {
-        // i am initialize planet grid with empty squares
+        // Initialize planet grid with empty squares
         for (int i = 0; i < gridWidth; i++)
         {
             for (int j = 0; j < gridHeight; j++)
@@ -62,8 +41,8 @@ public class CaterpillarControlSystem
             }
         }
 
-        
-        
+        // Add obstacles, spice, and boosters to the planet grid (as per provided map)
+        // You'll need to manually add these based on the provided map
     }
 
     private void InitializeCaterpillar()
@@ -182,6 +161,8 @@ public class CaterpillarControlSystem
         else
         {
             Console.WriteLine("No commands to undo.");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
     }
 
@@ -198,6 +179,8 @@ public class CaterpillarControlSystem
         else
         {
             Console.WriteLine("No commands to redo.");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
     }
 
@@ -220,4 +203,69 @@ public class CaterpillarControlSystem
         DisplayPlanet(); // Reuse DisplayPlanet to also show caterpillar
     }
 
+    public void Run()
+    {
+        while (true)
+        {
+            Console.Clear(); // Clear the console for a cleaner display
+            DisplayPlanet();
+            DisplayCaterpillar();
+
+            Console.WriteLine("\nCommands:");
+            Console.WriteLine("1. Move Right (R)");
+            Console.WriteLine("2. Move Left (L)");
+            Console.WriteLine("3. Move Up (U)");
+            Console.WriteLine("4. Move Down (D)");
+            Console.WriteLine("5. Undo Last Move (Z)");
+            Console.WriteLine("6. Redo Last Move (Y)");
+            Console.WriteLine("7. Exit (X)");
+
+            Console.Write("\nEnter your choice: ");
+            char choice = char.ToUpper(Console.ReadKey().KeyChar);
+            Console.WriteLine(); // Move to the next line after user input
+
+            switch (choice)
+            {
+                case 'R':
+                case 'L':
+                case 'U':
+                case 'D':
+                    Console.Write("Enter number of steps: ");
+                    if (int.TryParse(Console.ReadLine(), out int steps))
+                    {
+                        ExecuteCommand(choice, steps);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input for steps.");
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                    break;
+                case 'Z':
+                    UndoLastCommand();
+                    break;
+                case 'Y':
+                    RedoLastCommand();
+                    break;
+                case 'X':
+                    Console.WriteLine("Exiting...");
+                    return;
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        CaterpillarControlSystem controlSystem = new CaterpillarControlSystem();
+        controlSystem.Run();
+    }
 }
