@@ -16,7 +16,7 @@ public class CaterpillarControlSystem
     private const char emptySquare = '.';
     private const char head = 'H';
     private const char tail = 'T';
-    private const string logFileName = "command_log.txt";
+    private const string logFileName = "command_log.txt";  
 
     public CaterpillarControlSystem()
     {
@@ -67,7 +67,7 @@ public class CaterpillarControlSystem
             "s**********$*********#*B******"
         };
 
-        // Loop through each row of the map layout and populate the planet grid
+        // lets do a loop through each row of the map layout and populate the planet grid
         for (int i = 0; i < mapLayout.Length; i++)
         {
             string row = mapLayout[i];
@@ -199,7 +199,7 @@ public class CaterpillarControlSystem
             switch (direction)
             {
                 case 'U':
-                    ExecuteCommand('D', steps); // Move opposite direction
+                    ExecuteCommand('D', steps); // Move to the opposite dir
                     break;
                 case 'D':
                     ExecuteCommand('U', steps);
@@ -257,11 +257,12 @@ public class CaterpillarControlSystem
         DisplayPlanet(); // Reuse DisplayPlanet to also show caterpillar
     }
 
+    //a simple user interface.... just something basic...
     public void Run()
     {
         while (true)
         {
-            Console.Clear(); // Clear the console for a cleaner display
+            Console.Clear(); // We call the Clear function to clear the console for a cleaner display
             DisplayPlanet();
             DisplayCaterpillar();
 
@@ -276,7 +277,7 @@ public class CaterpillarControlSystem
 
             Console.Write("\nEnter your choice: ");
             char choice = char.ToUpper(Console.ReadKey().KeyChar);
-            Console.WriteLine(); // Move to the next line after user input
+            Console.WriteLine(); // We Move to the next line after user input
 
             switch (choice)
             {
