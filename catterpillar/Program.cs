@@ -16,6 +16,7 @@ public class CaterpillarControlSystem
     private const char emptySquare = '.';
     private const char head = 'H';
     private const char tail = 'T';
+    private const string logFileName = "command_log.txt";
 
     public CaterpillarControlSystem()
     {
@@ -32,17 +33,49 @@ public class CaterpillarControlSystem
 
     private void InitializePlanet()
     {
-        // Initialize planet grid with empty squares
-        for (int i = 0; i < gridWidth; i++)
+        string[] mapLayout = new string[]
         {
-            for (int j = 0; j < gridHeight; j++)
+            "$*********$**********$********",
+            "***$*******B*************#****",
+            "************************#*****",
+            "***#**************************",
+            "**$*************************#*",
+            "$$***#************************",
+            "**************$***************",
+            "**********$*********$*****#***",
+            "********************$*******$*",
+            "*********#****$***************",
+            "**B*********$*****************",
+            "*************$$****B**********",
+            "****$************************B",
+            "**********************#*******",
+            "***********************$***B**",
+            "********$***$*****************",
+            "************$*****************",
+            "*********$********************",
+            "*********************#********",
+            "*******$**********************",
+            "*#***$****************#*******",
+            "****#****$****$********B******",
+            "***#**$********************$**",
+            "***************#**************",
+            "***********$******************",
+            "****B****#******B*************",
+            "***$***************$*****B****",
+            "**********$*********#*$*******",
+            "**************#********B******",
+            "s**********$*********#*B******"
+        };
+
+        // Loop through each row of the map layout and populate the planet grid
+        for (int i = 0; i < mapLayout.Length; i++)
+        {
+            string row = mapLayout[i];
+            for (int j = 0; j < row.Length; j++)
             {
-                planetGrid[i, j] = emptySquare;
+                planetGrid[j, i] = row[j];
             }
         }
-
-        // Add obstacles, spice, and boosters to the planet grid (as per provided map)
-        // You'll need to manually add these based on the provided map
     }
 
     private void InitializeCaterpillar()
@@ -120,8 +153,6 @@ public class CaterpillarControlSystem
         return Math.Abs(position1[0] - position2[0]) + Math.Abs(position1[1] - position2[1]);
     }
 
-    private const string logFileName = "command_log.txt";
-
     // New method to save logs to a file
     private void SaveLogsToFile()
     {
@@ -151,6 +182,7 @@ public class CaterpillarControlSystem
         redoLog.Clear();
         SaveLogsToFile(); // Call the new method to save logs to file
     }
+
     public void UndoLastCommand()
     {
         // Undo the last command
@@ -224,8 +256,6 @@ public class CaterpillarControlSystem
         // Display caterpillar's position on the planet's grid
         DisplayPlanet(); // Reuse DisplayPlanet to also show caterpillar
     }
-
-
 
     public void Run()
     {
